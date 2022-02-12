@@ -12,6 +12,7 @@
         <form action="">
             <p>Логин: <input type="text"></p>
             <p>Пароль: <input type="password"></p>
+            <p><input type="submit"></p>
         </form>
     </div>
 </body>
