@@ -13,13 +13,16 @@ session_start();
         <?php
         if(isset ($_SESSION['success'])){
             echo('<p style = "color:green">'.$_SESSION['success']."</p>\n");
+            unset($_SESSION['success']);
         }
 
         if(isset($_SESSION['user'])){
             ?>
             <p>Доброго времени суток <?php echo($_SESSION['user']); ?>.</p>
+            <p>Чтобы деавторизоваться нажмите <a href="logout.php">сюда</a>.</p>
+        <?php } else {?>
+            <p>Для работы необходимо авторизоваться, чтобы сделать это нажмите <a href="login.php">сюда</a>.</p>
         <?php } ?>
-        ?>
     </div>
 </body>
 </html>

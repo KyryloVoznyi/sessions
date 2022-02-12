@@ -1,5 +1,6 @@
 <?php
 require_once "pdo.php";
+session_start();
 ?>
 
 <html lang="en">
@@ -13,9 +14,43 @@ require_once "pdo.php";
 
 <body>
     <div style="margin:50 auto;width:500px">
-        <form action="">
-            <p>Логин: <input type="text"></p>
-            <p>Пароль: <input type="password"></p>
+    <?php
+    if (isset($_SESSION['user'])) {
+        unset($_SESSION['user']);
+        header('Location:app.php');
+        return;
+    } elseif(isset($_POST['login'])&&isset($_POST['password'])) {
+        $sql= "SELECT * FROM `users` WHERE login = :login AND password = :password";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(array(
+            ':login'=> $_POST['login'],
+            ':password'=> $_POST['password']
+        ));
+        $count = $stmt -> rowCount();
+        if($count!=0){
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $dbuser=$row['login'];
+                $dbpass=$row['password'];
+            }
+            if($_POST['login']==$dbuser && $_POST['password']==$dbpass){
+                $_SESSION['user']=$dbuser;
+                header('Location:app.php');
+                return;
+            }else{
+                $_SESSION['success']="Неверный логин или пароль";
+                header('Location:app.php');
+                return;
+            }
+        }else{
+            $_SESSION['success']="Такого пользователя не существует";
+            header('Location:app.php');
+            return;
+        }
+    }
+    ?>
+        <form action="" method="post">
+            <p>Логин: <input type="text" name="login"></p>
+            <p>Пароль: <input type="password" name="password"></p>
             <p><input type="submit"></p>
         </form>
     </div>
