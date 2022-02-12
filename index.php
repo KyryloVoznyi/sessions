@@ -1,3 +1,7 @@
+<?php
+require_once "pdo.php";
+?>
+
 <html lang="en">
 
 <head>
